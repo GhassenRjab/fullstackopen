@@ -5,6 +5,12 @@ const Button = ({ text, handleClick }) => (
   <button onClick={handleClick}>{text}</button>
 );
 
+const Statistic = ({ text, value }) => (
+  <div>
+    {text} {value}
+  </div>
+);
+
 const Statistics = ({ good, neutral, bad }) => {
   const sum = good + neutral + bad;
 
@@ -15,12 +21,12 @@ const Statistics = ({ good, neutral, bad }) => {
         <div>No feedback given</div>
       ) : (
         <>
-          <div>good {good}</div>
-          <div>neutral {neutral}</div>
-          <div>bad {bad}</div>
-          <div>all {sum}</div>
-          <div>average {(good - bad) / sum}</div>
-          <div>positive {(good / sum) * 100} %</div>
+          <Statistic text="good" value={good} />
+          <Statistic text="neutral" value={neutral} />
+          <Statistic text="bad" value={bad} />
+          <Statistic text="all" value={sum} />
+          <Statistic text="average" value={(good - bad) / sum} />
+          <Statistic text="positive" value={`${(good / sum) * 100} %`} />
         </>
       )}
     </>
