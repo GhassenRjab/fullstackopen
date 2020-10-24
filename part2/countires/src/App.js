@@ -22,6 +22,10 @@ const App = () => {
     setSearch(search);
   };
 
+  const onShowCountryClicked = (countryNumericCode) => {
+    setCountries(countries.filter(({numericCode}) => numericCode === countryNumericCode));
+  }
+
   return (
     <div>
       <Filter search={search} updateSearch={onSearchChange} />
@@ -29,7 +33,7 @@ const App = () => {
         ? <p>Too many matches, specify another filter</p>
         : countries.length === 1
           ? <Country country={countries[0]} />
-          : <Countries countries={countries} />}
+          : <Countries countries={countries} onShowCountryClicked={onShowCountryClicked} />}
     </div>
   )
 }
