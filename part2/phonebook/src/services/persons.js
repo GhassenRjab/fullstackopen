@@ -1,6 +1,6 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = 'http://localhost:3001/persons';
 
 export const getAll = () => {
   return axios.get(baseUrl);
@@ -8,4 +8,8 @@ export const getAll = () => {
 
 export const create = (newPerson) => {
   return axios.post(baseUrl, newPerson);
+};
+
+export const remove = (personId) => {
+  return axios.delete(`${baseUrl}/${personId}`);
 };
