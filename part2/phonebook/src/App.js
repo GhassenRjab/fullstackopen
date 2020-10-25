@@ -4,13 +4,15 @@ import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 
+const personsURL = 'http://localhost:3001/persons';
+
 const App = () => {
   const [search, setSearch] = useState('');
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/persons')
+      .get(personsURL)
       .then((response) => {
         setPersons(response.data);
       });
@@ -25,7 +27,11 @@ const App = () => {
   };
 
   const addPerson = (person) => {
-    setPersons(persons.concat(person));
+    axios
+      .post(personsURL, person)
+      .then((response) => {
+        setPersons(persons.concat(response.data));
+      });
   }
 
   return (

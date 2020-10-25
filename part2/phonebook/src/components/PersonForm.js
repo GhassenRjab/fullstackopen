@@ -19,6 +19,7 @@ const PersonForm = ({ persons, addPerson }) => {
     } else {
       addPerson({ name: newName, number: newNumber });
       setNewName('');
+      setNewNumber('');
     }
   }
 
