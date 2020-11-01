@@ -32,6 +32,14 @@ const App = () => {
       });
   }
 
+  const updatePerson = (personId, person) => {
+    personsService
+      .update(personId, person)
+      .then((response) => {
+        setPersons(persons.map((person) => person.id === personId ? response.data : person));
+      });
+  }
+
   const deletePerson = (personId) => {
     personsService
       .remove(personId)
@@ -46,7 +54,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter search={search} updateSearch={onSearchChange} />
       <h3>Add a new</h3>
-      <PersonForm persons={persons} addPerson={addPerson} />
+      <PersonForm persons={persons} addPerson={addPerson} updatePerson={updatePerson} />
       <h3>Numbers</h3>
       <Persons persons={personsToShow} deletePerson={deletePerson} />
     </div>
