@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Notification from './components/Notification';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
@@ -6,7 +7,8 @@ import * as personsService from './services/persons';
 
 const App = () => {
   const [search, setSearch] = useState('');
-  const [persons, setPersons] = useState([])
+  const [persons, setPersons] = useState([]);
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   useEffect(() => {
     personsService
@@ -24,11 +26,19 @@ const App = () => {
     setSearch(search);
   };
 
+  const showNotification = (message) => {
+    setNotificationMessage(message);
+    setTimeout(() => {
+      setNotificationMessage('');
+    }, 2000);
+  }
+
   const addPerson = (person) => {
     personsService
       .create(person)
       .then((response) => {
         setPersons(persons.concat(response.data));
+        showNotification(`Added ${person.name}`);
       });
   }
 
@@ -37,6 +47,7 @@ const App = () => {
       .update(personId, person)
       .then((response) => {
         setPersons(persons.map((person) => person.id === personId ? response.data : person));
+        showNotification(`Updated ${person.name}`);
       });
   }
 
@@ -52,6 +63,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <Filter search={search} updateSearch={onSearchChange} />
       <h3>Add a new</h3>
       <PersonForm persons={persons} addPerson={addPerson} updatePerson={updatePerson} />
