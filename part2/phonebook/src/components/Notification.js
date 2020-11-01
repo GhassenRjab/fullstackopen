@@ -1,22 +1,32 @@
 import React from 'react';
 
-const Notification = ({ message }) => {
+const baseStyle = {
+  background: "lightgrey",
+  fontSize: 20,
+  borderStyle: "solid",
+  borderRadius: 5,
+  padding: 10,
+  marginBottom: 10,
+};
+
+const styles = {
+  info: {
+    ...baseStyle,
+    color: "green",
+  },
+  error: {
+    ...baseStyle,
+    color: "red",
+  },
+};
+
+const Notification = ({ type, message }) => {
   if (!message) {
     return null;
-  }
-
-  const style = {
-    color: "green",
-    background: "lightgrey",
-    fontSize: 20,
-    borderStyle: "solid",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
   };
 
   return (
-    <div style={style} className="notification">
+    <div style={styles[type]} className="notification">
       {message}
     </div>
   )

@@ -8,6 +8,7 @@ import * as personsService from './services/persons';
 const App = () => {
   const [search, setSearch] = useState('');
   const [persons, setPersons] = useState([]);
+  const [notificationType, setNotificationType] = useState('');
   const [notificationMessage, setNotificationMessage] = useState('');
 
   useEffect(() => {
@@ -26,9 +27,11 @@ const App = () => {
     setSearch(search);
   };
 
-  const showNotification = (message) => {
+  const showNotification = (type, message) => {
+    setNotificationType(type);
     setNotificationMessage(message);
     setTimeout(() => {
+      setNotificationType('');
       setNotificationMessage('');
     }, 2000);
   }
@@ -38,7 +41,7 @@ const App = () => {
       .create(person)
       .then((response) => {
         setPersons(persons.concat(response.data));
-        showNotification(`Added ${person.name}`);
+        showNotification('info', `Added ${person.name}`);
       });
   }
 
@@ -47,23 +50,28 @@ const App = () => {
       .update(personId, person)
       .then((response) => {
         setPersons(persons.map((person) => person.id === personId ? response.data : person));
-        showNotification(`Updated ${person.name}`);
+        showNotification('info', `Updated ${person.name}`);
+      })
+      .catch(() => {
+        showNotification('error', `Information of ${person.name} has already been removed from server`);
+        setPersons(persons.filter((person) => person.id !== personId));
       });
   }
 
   const deletePerson = (personId) => {
     personsService
       .remove(personId)
-      .then((response) => {
-        console.log(response.data);
+      .then(() => {
+        const deletedUser = persons.find((person) => person.id === personId);
         setPersons(persons.filter((person) => person.id !== personId));
+        showNotification('info', `Deleted ${deletedUser.name}`);
       });
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+      <Notification type={notificationType} message={notificationMessage} />
       <Filter search={search} updateSearch={onSearchChange} />
       <h3>Add a new</h3>
       <PersonForm persons={persons} addPerson={addPerson} updatePerson={updatePerson} />
